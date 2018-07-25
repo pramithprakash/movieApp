@@ -1,0 +1,448 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>My Movie DB</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: 'Varela Round', sans-serif;
+            font-size: 1rem;
+        }
+        .container {
+            padding-left: 0;
+            padding-right: 0;
+            max-width: 740px;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .navbar {
+            padding-bottom: 0;
+        }
+
+        nav {
+            background-color: #3498DB !important;
+        }
+
+        nav form {
+            margin-bottom: 0;
+            width: 100%;
+            clear: both;
+        }
+
+        nav nav {
+            float: right;
+        }
+      
+        nav a{
+            color: #fff !important;
+        }
+
+        .navbar-header {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-bottom: 7px;
+            width: 100%;
+        }
+
+        .form-control {
+            border-radius: 6px 6px 0 0;
+            border-width: 3px 1px 0px 1px;
+            margin-bottom: 3px;
+        }
+
+        .search_results h2 {
+            display: none;
+        }
+
+        section.content {
+            max-width: 740px;
+            width: 90%;
+            margin: 30px auto 0;
+            box-sizing: border-box;
+        }
+        section.content .results {
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            border: 1px solid #e3e3e3;
+            margin-top: 16px;
+        }
+        section.content .poster{
+            height: 278px;
+            line-height: 0;   
+            overflow: hidden;
+            width: 185px;
+            position: relative;
+        }
+        section.content .poster .fa{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 99;
+            color: #fff;
+            cursor: pointer;
+        }
+        section.content  div.info {
+            width: calc(100% - 185px);
+            height: 278px;
+            position: relative;
+            box-sizing: border-box;
+            padding: 10px 16px 16px 16px;
+            overflow: hidden;
+        }
+        section.content  div.info span{
+            color: rgba(0,0,0,0.6);
+            line-height: 1em;
+            display: block;
+        }
+        /* Absolute Center Spinner */
+
+        #loading {
+            position: fixed;
+            z-index: 999;
+            height: 2em;
+            width: 2em;
+            overflow: show;
+            margin: auto;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            display: none;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        .polularity {
+            width: 100px;
+            background: #eee;
+            height: 5px;
+            margin: 0 0 9px;
+            border: 1px solid #05e607;
+        }
+
+       .polularity div{
+            background: #05e607;
+            height: 3px;
+        }
+
+        /* Transparent Overlay */
+
+        #loading:before {
+            content: '';
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* :not(:required) hides these rules from IE9 and below */
+
+        #loading:not(:required) {
+            /* hide "loading..." text */
+            font: 0/0 a;
+            color: transparent;
+            text-shadow: none;
+            background-color: transparent;
+            border: 0;
+        }
+
+        #loading:not(:required):after {
+            content: '';
+            display: block;
+            font-size: 10px;
+            width: 1em;
+            height: 1em;
+            margin-top: -0.5em;
+            -webkit-animation: spinner 1500ms infinite linear;
+            -moz-animation: spinner 1500ms infinite linear;
+            -ms-animation: spinner 1500ms infinite linear;
+            -o-animation: spinner 1500ms infinite linear;
+            animation: spinner 1500ms infinite linear;
+            border-radius: 0.5em;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+            box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+        }
+
+        /* Animation */
+
+        @-webkit-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @-moz-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @-o-keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinner {
+            0% {
+                -webkit-transform: rotate(0deg);
+                -moz-transform: rotate(0deg);
+                -ms-transform: rotate(0deg);
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                -moz-transform: rotate(360deg);
+                -ms-transform: rotate(360deg);
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="loading"></div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">My Movie DB</a>
+
+                <nav class="nav">
+                    <a class="nav-link" id="fav-link" href="#">Favorite list</a>
+                </nav>
+            </div>
+            <form onsubmit="event.preventDefault()">
+                <input class="form-control" type="text" autocomplete="off" placeholder="Search" id="search" aria-label="Search">
+            </form>
+        </div>
+    </nav>
+    <section class="content">
+        <div class="search_results">
+            <div class="results-wrapper" id="results-wrapper"></div>
+        </div>
+    </section>
+    <script>
+
+        class Movies {
+            constructor() {
+                this.api_key = '34040066e6feb3d52b20a96fa31440af';
+                this.loader = document.getElementById("loading");
+                this.searchEle = document.getElementById('search');
+                this.resultWrapper = document.getElementById("results-wrapper");
+                this.favStorage = localStorage.getItem('favStorage') ? JSON.parse(localStorage.getItem('favStorage')) : {results:[]};
+            }
+          
+            toggleLoader() {
+                this.loader.classList.toggle("show");
+            }
+
+            toggleInputError(flag) {
+                if(flag) {
+                    this.searchEle.classList.add("is-invalid");
+                } else {
+                    this.searchEle.classList.remove("is-invalid");
+                }
+            }
+
+            findMovies() {
+                let searchText = this.searchEle.value;
+                this.toggleLoader();
+                if (!searchText) {
+                    this.toggleInputError(true);
+                    this.toggleLoader();
+                    return false;
+                }
+                this.toggleInputError();
+
+                this.fetchMovies(searchText);
+            }
+
+            fetchMovies(searchText) {
+                let xhr = new XMLHttpRequest(),
+                    self = this;
+
+                xhr.open('get', "https://api.themoviedb.org/3/search/movie?api_key=" + this.api_key + "&include_adult=false&query=" + searchText, true);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            var data = JSON.parse(xhr.responseText);
+
+                            if (data && data.results && data.results.length == 0) {
+                                self.noResults();
+                            } else {
+                                self.listMovies(data);
+                            }
+                        }
+                        if (xhr.status == 404) {
+                            alert('ERROR');
+                        }
+                    }
+                }
+                xhr.send();
+            }
+
+            listMovies(data, favTrue) {
+                let h2 = document.createElement("div");
+                let self = this;
+                h2.innerHTML = "Search > Movie Results";
+                this.resultWrapper.innerHTML = "";
+                this.resultWrapper.append(h2);
+
+                for (let i = 0; i < data.results.length; i++) {
+
+                    let resultList = document.createElement("div");
+
+                    resultList.innerHTML = `
+                        <div class="results">
+                            <div class="poster">
+                                <img src="https://image.tmdb.org/t/p/w185_and_h278_bestv2/${data.results[i].poster_path}" />
+                                <a id="fav_${data.results[i].id}" class="fa fa-heart-o"></a>
+                            </div>
+                            <div class="info">
+                                <div class="polularity"><div style="width:${data.results[i].vote_average * 10 + '%'}"></div></div>
+                                <h4>${data.results[i].title}</h4>
+                                <span>${data.results[i].release_date}</span>
+                                <p>${data.results[i].overview.substring(0,400)}...</p>
+                            </div>
+                        </div>
+                    `;
+
+                    this.resultWrapper.appendChild(resultList);
+
+                    let fav = document.getElementById('fav_'+data.results[i].id);
+
+                    if (favTrue) {
+                        fav.classList.remove("fa-heart-o");
+                        fav.classList.add("fa-heart");
+                    }
+
+                    fav.addEventListener('click', function(event) {
+
+                        let ml = new MoviesList();
+
+                        let evtTarget = event.target;
+                        let id = evtTarget.getAttribute('id').substring(4, evtTarget.getAttribute('id').length);
+
+                        fav.classList.remove("fa-heart-o");
+                        fav.classList.add("fa-heart");
+
+                        var favObj = data.results.find(function (obj) { 
+                            return obj.id == id; 
+                        });
+
+                        let e = true;
+
+                        if (self.favStorage.results.length > 0){
+                            self.favStorage.results.map( item => {
+
+                                if (item.id == id){
+                                    e = false;
+                                }
+                            })
+                            if (e) {
+
+                                self.favStorage.results.push(favObj);
+                            } 
+                        } else {
+                            self.favStorage.results.push(favObj);
+                        }
+
+                        ml.addFavMovies(JSON.stringify(self.favStorage));
+                    });
+                }
+                this.toggleLoader();
+            }
+
+            noResults() {
+                let h2 = document.createElement("div");
+                this.resultWrapper.innerHTML = "";
+                h2.innerHTML = "Search > No Results found";
+                this.resultWrapper.append(h2);
+                this.toggleLoader();
+            }
+        }
+
+        class MoviesList {
+            addFavMovies(favStorage) {
+                localStorage.setItem('favStorage', favStorage);
+            }
+        }
+
+        (function(){
+            let form = document.getElementsByTagName('form')[0];
+            let favLink = document.getElementById('fav-link');
+            let favData = localStorage.getItem('favStorage');
+            let m = new Movies();
+
+            if (favData) {
+                m.toggleLoader();
+                m.listMovies(JSON.parse(favData),true);
+            } 
+
+            favLink.addEventListener('click', function() {
+                let favData = localStorage.getItem('favStorage');
+                m.toggleLoader();
+                m.listMovies(JSON.parse(favData), true);
+            });
+
+            form.addEventListener('submit', function() {
+                m.findMovies();
+            });
+        }());
+
+    </script>
+</body>
+
+</html>
