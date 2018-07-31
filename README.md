@@ -22,7 +22,7 @@ will insatll all the required npm modules from package.json
 
 ### To run the loca Server -
 ```
-node server.js
+npx webpack-dev-server
 ```
 
 
