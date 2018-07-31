@@ -1,0 +1,14 @@
+{
+  "name": "webpack-app",
+  "version": "1.0.0",
+  "description": "MovieApp",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "server.js"
+  },
+  "author": "pramith.com",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.3"
+  }
+}
